@@ -5,8 +5,10 @@ export default function useMouseListener(ref) {
   const [mousePosition, setMousePosition] = useState(null);
 
   useEffect(() => {
-    function handleMouseDown() {
-      setMouseIsPressed(true)
+    function handleMouseDown(e) {
+      if (ref.current.contains(e.target)) {
+        setMouseIsPressed(true)
+      }
     }
 
     function handleMouseUp() {
@@ -17,14 +19,14 @@ export default function useMouseListener(ref) {
       if (mouseIsPressed) setMousePosition({ x: e.clientX, y: e.clientY });
     }
 
-    ref.current.addEventListener('mousedown', handleMouseDown);
-    ref.current.addEventListener('mouseup', handleMouseUp);
-    ref.current.addEventListener('mousemove', hadleMouseMove);
+    document.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mouseup', handleMouseUp);
+    document.addEventListener('mousemove', hadleMouseMove);
 
     return () => {
-      ref.current.removeEventListener('mousedown', handleMouseDown);
-      ref.current.removeEventListener('mouseup', handleMouseUp);
-      ref.current.removeEventListener('mousemove', hadleMouseMove);
+      document.removeEventListener('mousedown', handleMouseDown);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('mousemove', hadleMouseMove);
     }
   }, [ref, mouseIsPressed]);
 
