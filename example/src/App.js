@@ -10,16 +10,24 @@ const refStyle = {
   fontFamily: 'monospace',
   userSelect: 'none',
   display: 'flex',
-  cursor: 'pointer',
+  flexDirection: 'column',
+}
+
+const handleStyle = {
+  background: 'white',
+  color: 'black',
+  cursor: 'pointer'
 }
 
 function Simple() {
   const initialPosition = useMemo(() => ({ x: 200, y: 500 }), []);
-  const { ref } = useDraggable({ initialPosition });
+  const { ref, refHandle } = useDraggable({ initialPosition });
 
   return (
     <div ref={ref} style={refStyle} id="simple">
       <span>Drag Me :3</span>
+
+      <div ref={refHandle} style={handleStyle}>only here</div>
     </div>
   );
 }

@@ -12,7 +12,7 @@ const DEFAULT_PROPS = {
 export default function useDraggable({ initialPosition } = DEFAULT_PROPS) {
   const ref = useRef(null);
   const refHandle = useRef(null);
-  const mouseProps = useMouseListener(ref);
+  const mouseProps = useMouseListener(refHandle.current ? refHandle : ref);
   const position = usePosition(ref, mouseProps, initialPosition);
 
   return { ref, refHandle, position };
