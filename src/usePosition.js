@@ -2,55 +2,61 @@ import { useReducer, useEffect } from "react";
 
 const INITIAL_STATE = {
   currentPosition: { x: 0, y: 0 },
-  lastMousePosition: null,
-}
+  lastMousePosition: null
+};
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'SET_INITIAL_POSITION': {
+    case "SET_INITIAL_POSITION": {
       const { x, y } = action.payload;
       return { ...state, currentPosition: { x, y } };
     }
 
-    case 'UPDATE_POSITION': {
-      const { position, isPressed } = action.payload;
+    case "UPDATE_POSITION": {
+      const { axis, mouseProps } = action.payload;
 
-      if (!isPressed)
-        return { ...state, lastMousePosition: null }
+      if (!mouseProps.isPressed) return { ...state, lastMousePosition: null };
 
       if (!state.lastMousePosition)
-        return { ...state, lastMousePosition: position };
+        return { ...state, lastMousePosition: mouseProps.position };
 
-      const xDelta = position.x - state.lastMousePosition.x;
-      const yDelta = position.y - state.lastMousePosition.y;
+      const xDelta = ["x", "both"].includes(axis)
+        ? mouseProps.position.x - state.lastMousePosition.x
+        : 0;
+      const yDelta = ["y", "both"].includes(axis)
+        ? mouseProps.position.y - state.lastMousePosition.y
+        : 0;
 
       const currentPosition = {
         x: state.currentPosition.x + xDelta,
-        y: state.currentPosition.y + yDelta,
-      }
+        y: state.currentPosition.y + yDelta
+      };
 
-      return { ...state, currentPosition, lastMousePosition: position };
+      return {
+        ...state,
+        currentPosition,
+        lastMousePosition: mouseProps.position
+      };
     }
 
     default:
-      throw new Error('Unexpected action was dispatched');
+      throw new Error("Unexpected action was dispatched");
   }
 }
 
-export default function usePosition(ref, mouseProps, initialPosition) {
+export default function usePosition(ref, mouseProps, positionProps) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
+  const { initialPosition, axis } = positionProps;
 
   useEffect(() => {
     const payload = initialPosition || ref.current.getBoundingClientRect();
-    dispatch({ type: 'SET_INITIAL_POSITION', payload });
+    dispatch({ type: "SET_INITIAL_POSITION", payload });
   }, [ref, initialPosition]);
 
-  useEffect(() => dispatch({ type: 'UPDATE_POSITION', payload: mouseProps }), [mouseProps]);
+  useEffect(
+    () => dispatch({ type: "UPDATE_POSITION", payload: { mouseProps, axis } }),
+    [mouseProps, axis]
+  );
 
-  useEffect(() => {
-    const { x, y } = state.currentPosition;
-    ref.current.style.transform = `translate(${x}px, ${y}px)`;
-  }, [state]);
-
-  return state;
+  return state.currentPosition;
 }

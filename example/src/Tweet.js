@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components';
+import React from "react";
+import PropTypes from "prop-types";
+import styled from "styled-components";
 
-import tweetAuthor from './tweet-author.jpg';
+import tweetAuthor from "./tweet-author.jpg";
 
 const StyledTweet = styled.article`
-  width: 400px;
+  width: 450px;
   background: #15202b;
-  cursor: ${props => props.isDraggable ? 'move' : 'default'};
+  cursor: ${props => (props.isDraggable ? "move" : "default")};
   display: flex;
   align-items: flex-start;
   padding: 1rem;
@@ -70,7 +70,7 @@ const Tweet = React.forwardRef((props, ref) => (
       <div className="message">{props.message}</div>
     </div>
   </StyledTweet>
-))
+));
 
 Tweet.propTypes = {
   forwardedRef: PropTypes.oneOfType([
@@ -79,10 +79,10 @@ Tweet.propTypes = {
   ]),
   message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
   isDraggable: PropTypes.bool
-}
+};
 
 Tweet.defaultProps = {
   isDraggable: true
-}
+};
 
 export default Tweet;
