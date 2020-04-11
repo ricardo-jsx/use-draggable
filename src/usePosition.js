@@ -1,4 +1,4 @@
-import { useState, useReducer, useEffect, useMemo } from "react";
+import { useReducer, useEffect } from "react";
 
 const INITIAL_STATE = {
   currentPosition: { x: 0, y: 0 },
@@ -13,22 +13,23 @@ function reducer(state, action) {
     }
 
     case 'UPDATE_POSITION': {
-      if (!state.lastMousePosition)
-        return { ...state, lastMousePosition: action.payload };
+      const { position, isPressed } = action.payload;
 
-      const xDelta = action.payload.x - state.lastMousePosition.x;
-      const yDelta = action.payload.y - state.lastMousePosition.y;
+      if (!isPressed)
+        return { ...state, lastMousePosition: null }
+
+      if (!state.lastMousePosition)
+        return { ...state, lastMousePosition: position };
+
+      const xDelta = position.x - state.lastMousePosition.x;
+      const yDelta = position.y - state.lastMousePosition.y;
 
       const currentPosition = {
         x: state.currentPosition.x + xDelta,
         y: state.currentPosition.y + yDelta,
       }
 
-      return {
-        ...state,
-        currentPosition,
-        lastMousePosition: action.payload,
-      }
+      return { ...state, currentPosition, lastMousePosition: position };
     }
 
     default:
@@ -36,7 +37,7 @@ function reducer(state, action) {
   }
 }
 
-export default function usePosition(ref, mousePosition, initialPosition) {
+export default function usePosition(ref, mouseProps, initialPosition) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
@@ -44,7 +45,7 @@ export default function usePosition(ref, mousePosition, initialPosition) {
     dispatch({ type: 'SET_INITIAL_POSITION', payload });
   }, [ref, initialPosition]);
 
-  useEffect(() => dispatch({ type: 'UPDATE_POSITION', payload: mousePosition }), [mousePosition]);
+  useEffect(() => dispatch({ type: 'UPDATE_POSITION', payload: mouseProps }), [mouseProps]);
 
   useEffect(() => {
     const { x, y } = state.currentPosition;

@@ -1,22 +1,48 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
+
+const INITIAL_STATE = {
+  isPressed: false,
+  position: null,
+}
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'MOUSE_DOWN': {
+      return { ...state, isPressed: true, position: action.payload }
+    }
+
+    case 'MOUSE_UP': {
+      return { ...state, isPressed: false }
+    }
+
+    case 'MOUSE_MOVE': {
+      if (state.isPressed)
+        return { ...state, position: action.payload }
+
+      return state;
+    }
+
+    default:
+      throw new Error('Unexpected action was dispatched');
+  }
+}
 
 export default function useMouseListener(ref) {
-  const [mouseIsPressed, setMouseIsPressed] = useState(false);
-  const [mousePosition, setMousePosition] = useState(null);
+  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
     function handleMouseDown(e) {
       if (ref.current.contains(e.target)) {
-        setMouseIsPressed(true)
+        dispatch({ type: 'MOUSE_DOWN', payload: { x: e.clientX, y: e.clientY } })
       }
     }
 
     function handleMouseUp() {
-      setMouseIsPressed(false)
+      dispatch({ type: 'MOUSE_UP' })
     }
 
     function hadleMouseMove(e) {
-      if (mouseIsPressed) setMousePosition({ x: e.clientX, y: e.clientY });
+      dispatch({ type: 'MOUSE_MOVE', payload: { x: e.clientX, y: e.clientY } })
     }
 
     document.addEventListener('mousedown', handleMouseDown);
@@ -28,7 +54,7 @@ export default function useMouseListener(ref) {
       document.removeEventListener('mouseup', handleMouseUp);
       document.removeEventListener('mousemove', hadleMouseMove);
     }
-  }, [ref, mouseIsPressed]);
+  }, [ref, dispatch]);
 
-  return { mousePosition };
+  return state;
 }
