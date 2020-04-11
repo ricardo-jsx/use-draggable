@@ -45,7 +45,6 @@ export function WithDragHandle() {
   return (
     <Tweet
       ref={ref}
-      refHandle={refHandle}
       isDraggable={false}
       message={
         <>
@@ -113,5 +112,23 @@ export function WithBounds() {
         />
       </StyledBounds>
     </>
+  );
+}
+
+export function WithMouseEvents() {
+  const { ref, mouseProps } = useDraggable();
+
+  return (
+    <Tweet
+      ref={ref}
+      message={
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <span>I listen to mouse actions.</span>
+          <span>Pressed: {mouseProps.isPressed ? "Yes" : "No"}</span>
+          <span>Dragging: {mouseProps.isDragging ? "Yes" : "No"}</span>
+          <span>Drag Stoped: {mouseProps.isDragStopped ? "Yes" : "No"}</span>
+        </div>
+      }
+    />
   );
 }

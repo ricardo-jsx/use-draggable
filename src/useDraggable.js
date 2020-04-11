@@ -31,5 +31,5 @@ export default function useDraggable(props) {
     ref.current.style.transform = `translate(${boundPosition.x}px, ${boundPosition.y}px)`;
   }, [boundPosition]);
 
-  return { ref, refHandle, refBound, position: boundPosition };
+  return { ref, refHandle, refBound, position: boundPosition, mouseProps };
 }

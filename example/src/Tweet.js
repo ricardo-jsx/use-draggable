@@ -86,11 +86,13 @@ Tweet.propTypes = {
     PropTypes.shape({ current: PropTypes.elementType })
   ]),
   message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
-  isDraggable: PropTypes.bool
+  isDraggable: PropTypes.bool,
+  axis: PropTypes.oneOf(["both", "x", "y"])
 };
 
 Tweet.defaultProps = {
-  isDraggable: true
+  isDraggable: true,
+  axis: "both"
 };
 
 export default Tweet;
