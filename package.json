@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": "ricardo-jsx/use-draggable",
   "main": "dist/useDraggable.js",
-  "module": "dist/index.modern.js",
+  "module": "dist/useDraggable.modern.js",
   "source": "src/useDraggable.js",
   "engines": {
     "node": ">=10"

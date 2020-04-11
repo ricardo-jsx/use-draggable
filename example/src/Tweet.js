@@ -4,10 +4,18 @@ import styled from "styled-components";
 
 import tweetAuthor from "./tweet-author.jpg";
 
+function getCursorOfTweet(props) {
+  if (!props.isDraggable) return "default";
+  if (props.axis === "x") return "e-resize";
+  if (props.axis === "y") return "n-resize";
+
+  return "move";
+}
+
 const StyledTweet = styled.article`
-  width: 450px;
+  width: 500px;
   background: #15202b;
-  cursor: ${props => (props.isDraggable ? "move" : "default")};
+  cursor: ${getCursorOfTweet};
   display: flex;
   align-items: flex-start;
   padding: 1rem;
@@ -58,7 +66,7 @@ const StyledTweet = styled.article`
 `;
 
 const Tweet = React.forwardRef((props, ref) => (
-  <StyledTweet ref={ref} isDraggable={props.isDraggable}>
+  <StyledTweet ref={ref} isDraggable={props.isDraggable} axis={props.axis}>
     <img src={tweetAuthor} alt="Tweet Author" />
     <div>
       <div className="username">

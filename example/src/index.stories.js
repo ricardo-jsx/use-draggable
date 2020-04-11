@@ -15,12 +15,11 @@ const StyledHandle = styled.span`
 `;
 
 const StyledBounds = styled.div`
-  position: absolute;
-  width: 600px;
-  height: 400px;
+  width: 700px;
+  height: 300px;
+  padding: 1rem;
   border: 1px solid black;
-  left: 100px;
-  top: 100px;
+  margin-bottom: 1rem;
 `;
 
 export function Default() {
@@ -77,25 +76,42 @@ export function WithAxis() {
 
   return (
     <div>
-      <Tweet ref={ref} message="I can be dragged me on both axis." />
-      <Tweet ref={refX} message="I can only be dragged horizontally." />
-      <Tweet ref={refY} message="I can only be dragged vertically." />
+      <Tweet
+        ref={ref}
+        axis="both"
+        message="I can be dragged me on both axis."
+      />
+      <Tweet
+        ref={refX}
+        axis="x"
+        message="I can only be dragged horizontally."
+      />
+      <Tweet ref={refY} axis="y" message="I can only be dragged vertically." />
     </div>
   );
 }
 
 export function WithBounds() {
-  const { ref, position } = useDraggable({
-    bounds: { top: 100, right: 700, bottom: 500, left: 100 }
+  const initialPosition = useMemo(() => ({ x: 0, y: 0 }), []);
+  const { ref, refBound, position } = useDraggable({ initialPosition });
+  const { ref: refB, refBound: refBoundB, position: positionB } = useDraggable({
+    initialPosition
   });
 
   return (
     <>
-      <StyledBounds />
-      <Tweet
-        ref={ref}
-        message={`I can only be dragged inside this box { x: ${position.x}px, y:${position.y}px}`}
-      />
+      <StyledBounds ref={refBound}>
+        <Tweet
+          ref={ref}
+          message={`I can only be dragged inside this box { x: ${position.x}px, y:${position.y}px}`}
+        />
+      </StyledBounds>
+      <StyledBounds ref={refBoundB}>
+        <Tweet
+          ref={refB}
+          message={`I can only be dragged inside this box { x: ${positionB.x}px, y:${positionB.y}px}`}
+        />
+      </StyledBounds>
     </>
   );
 }
