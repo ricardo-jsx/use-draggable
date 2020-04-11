@@ -58,9 +58,8 @@ const StyledTweet = styled.article`
 `;
 
 const Tweet = React.forwardRef((props, ref) => (
-  <StyledTweet ref={ref} isDraggable={!props.refHandle}>
+  <StyledTweet ref={ref} isDraggable={props.isDraggable}>
     <img src={tweetAuthor} alt="Tweet Author" />
-    {console.log(props)}
     <div>
       <div className="username">
         <span className="name">Ricardo JSX</span>
@@ -72,5 +71,18 @@ const Tweet = React.forwardRef((props, ref) => (
     </div>
   </StyledTweet>
 ))
+
+Tweet.propTypes = {
+  forwardedRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.elementType })
+  ]),
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.node]).isRequired,
+  isDraggable: PropTypes.bool
+}
+
+Tweet.defaultProps = {
+  isDraggable: true
+}
 
 export default Tweet;

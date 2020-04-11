@@ -26,7 +26,7 @@ export function WithInitialPosition() {
   const { ref } = useDraggable({ initialPosition });
 
   return (
-    <Tweet ref={ref} message="I will initially render at [200px, 50px]." />
+    <Tweet ref={ref} message="I have a start position of { x: 200, y: 50 } pixels." />
   );
 }
 
@@ -37,6 +37,7 @@ export function WithDragHandle() {
     <Tweet
       ref={ref}
       refHandle={refHandle}
+      isDraggable={false}
       message={
         <>
           <span>You can only drag me clicking </span>
