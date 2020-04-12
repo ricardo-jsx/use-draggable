@@ -1,15 +1,11 @@
 import { useState, useEffect, useMemo, RefObject } from "react";
 
 import { calculateSpacing } from "./utils";
-import { Position } from "./index.types";
+import { Position, Coords } from "./index.types";
 
 export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>, position: Position) : Position {
-  const [bounds, setBounds] = useState({
-    top: null,
-    right: null,
-    bottom: null,
-    left: null
-  });
+  const initialState: Coords = useMemo(() => ({ north: undefined, east: undefined, south: undefined, west: undefined }), []);
+  const [bounds, setBounds] = useState(initialState);
 
   useEffect(() => {
     const domRefRect = ref.current.getBoundingClientRect();
@@ -21,20 +17,23 @@ export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>,
       const boundWidth = domBoundRect.right - domBoundRect.left;
       const boundHeight = domBoundRect.bottom - domBoundRect.top;
 
-      const top =
+      const north =
         domBoundRect.top -
         domRefRect.top +
-        calculateSpacing(refBound.current, "Top");
-      const left =
+        calculateSpacing(refBound.current, 'top');
+
+      const west =
         domBoundRect.left -
         domRefRect.left +
-        calculateSpacing(refBound.current, "Left");
-      const right =
-        boundWidth - width - calculateSpacing(refBound.current, "Right") * 2;
-      const bottom =
-        boundHeight - height - calculateSpacing(refBound.current, "Bottom") * 2;
+        calculateSpacing(refBound.current, 'left');
 
-      setBounds({ top, right, bottom, left });
+      const east =
+        boundWidth - width - calculateSpacing(refBound.current, 'right') * 2;
+        
+      const south =
+        boundHeight - height - calculateSpacing(refBound.current, 'bottom') * 2;
+
+      setBounds({ north, east, south, west });
     }
   }, [ref, refBound]);
 
@@ -43,10 +42,10 @@ export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>,
 
     if (Object.values(bounds).every(val => val === null)) return position;
 
-    if (y < bounds.top) y = bounds.top;
-    if (y > bounds.bottom) y = bounds.bottom;
-    if (x < bounds.left) x = bounds.left;
-    if (x > bounds.right) x = bounds.right;
+    if (y! < (bounds.north ?? Number.POSITIVE_INFINITY)) y = bounds.north;
+    if (y! > (bounds.south ?? Number.NEGATIVE_INFINITY)) y = bounds.south;
+    if (x! < (bounds.west ?? Number.NEGATIVE_INFINITY)) x = bounds.west;
+    if (x! > (bounds.east ?? Number.POSITIVE_INFINITY)) x = bounds.east;
 
     return { x, y };
   }, [position, bounds]);

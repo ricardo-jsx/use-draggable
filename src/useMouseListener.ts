@@ -3,7 +3,7 @@ import { useEffect, useReducer, RefObject } from "react";
 import { Mouse, Action } from './index.types';
 
 const INITIAL_STATE: Mouse = {
-  position: null,
+  position: { x: undefined, y: undefined },
   isPressed: false,
   isDragging: false,
   isDragStopped: false
@@ -45,7 +45,7 @@ export default function useMouseListener(ref: RefObject<any>): Mouse {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
-    function handleMouseDown(e) {
+    function handleMouseDown(e: any) {
       if (ref.current.contains(e.target)) {
         dispatch({
           type: "MOUSE_DOWN",
@@ -58,7 +58,7 @@ export default function useMouseListener(ref: RefObject<any>): Mouse {
       dispatch({ type: "MOUSE_UP" });
     }
 
-    function hadleMouseMove(e) {
+    function hadleMouseMove(e: any) {
       dispatch({ type: "MOUSE_MOVE", payload: { x: e.clientX, y: e.clientY } });
     }
 

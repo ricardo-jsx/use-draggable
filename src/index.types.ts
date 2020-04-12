@@ -1,15 +1,15 @@
 import { RefObject } from 'react';
 
 export interface Position {
-  x: number,
-  y: number
+  x?: number,
+  y?: number
 }
 
-export interface Limit {
-  top: number | null,
-  right: number | null,
-  bottom: number | null,
-  left: number | null,
+export interface Coords {
+  north?: number,
+  east?: number,
+  south?: number,
+  west?: number,
 }
 
 export interface Mouse {
@@ -19,10 +19,16 @@ export interface Mouse {
   isDragStopped: Boolean
 }
 
-export interface DraggableProps {
-  initialPosition?: Position,
+export interface PartialDraggableProps {
+  initialPosition?: Position | null,
   axis?: 'x' | 'y' | 'both',
-  limit?: Limit
+  limit?: Coords | null
+}
+
+export interface DraggableProps {
+  initialPosition: Position,
+  axis: 'x' | 'y' | 'both',
+  limit: Coords
 }
 
 export interface Draggable {

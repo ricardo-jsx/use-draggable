@@ -9,6 +9,7 @@ build
 dist
 .rpt2_cache
 example/dist/
+src/**/*.d.ts
 
 # misc
 .DS_Store

@@ -1,17 +1,17 @@
 import { useReducer, useEffect, RefObject } from "react";
 import { Mouse, Position, Action } from "./index.types";
 
-interface UsePosition {
+interface State {
   currentPosition: Position,
   lastMousePosition: Position | null
 }
 
-const INITIAL_STATE: UsePosition = {
+const INITIAL_STATE: State = {
   currentPosition: { x: 0, y: 0 },
   lastMousePosition: null
 };
 
-function reducer(state: UsePosition, action: Action) {
+function reducer(state: State, action: Action) {
   switch (action.type) {
     case "SET_INITIAL_POSITION": {
       const { x, y } = action.payload;
@@ -27,15 +27,15 @@ function reducer(state: UsePosition, action: Action) {
         return { ...state, lastMousePosition: mouseProps.position };
 
       const xDelta = ["x", "both"].includes(axis)
-        ? mouseProps.position.x - state.lastMousePosition.x
+        ? mouseProps.position.x - state.lastMousePosition.x!
         : 0;
       const yDelta = ["y", "both"].includes(axis)
-        ? mouseProps.position.y - state.lastMousePosition.y
+        ? mouseProps.position.y - state.lastMousePosition.y!
         : 0;
 
       const currentPosition = {
-        x: state.currentPosition.x + xDelta,
-        y: state.currentPosition.y + yDelta
+        x: state.currentPosition.x! + xDelta,
+        y: state.currentPosition.y! + yDelta
       };
 
       return {
@@ -54,7 +54,11 @@ export default function usePosition(ref: RefObject<any>, mouse: Mouse, initialPo
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
-    const payload = initialPosition || ref.current.getBoundingClientRect();
+    const payload = {
+      x: initialPosition.x || ref.current.getBoundingClientRect().x,
+      y: initialPosition.y || ref.current.getBoundingClientRect().y,
+    };
+
     dispatch({ type: "SET_INITIAL_POSITION", payload });
   }, [ref, initialPosition]);
 
