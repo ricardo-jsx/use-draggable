@@ -44,9 +44,8 @@ function reducer(state, action) {
   }
 }
 
-export default function usePosition(ref, mouseProps, positionProps) {
+export default function usePosition(ref, mouseProps, initialPosition, axis) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-  const { initialPosition, axis } = positionProps;
 
   useEffect(() => {
     const payload = initialPosition || ref.current.getBoundingClientRect();

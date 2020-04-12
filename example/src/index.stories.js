@@ -132,3 +132,30 @@ export function WithMouseEvents() {
     />
   );
 }
+
+export function WithDirectionLimits() {
+  const initialPosition = useMemo(() => ({ x: 300, y: 300 }), []);
+  const limit = useMemo(
+    () => ({
+      top: 300,
+      right: 300,
+      bottom: 300,
+      left: 300
+    }),
+    []
+  );
+
+  const { ref, position } = useDraggable({ initialPosition, limit });
+
+  return (
+    <Tweet
+      ref={ref}
+      message={
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <span>I can only be dragged 300px in any direction.</span>
+          <span>{`{ x: ${position.x}px, y:${position.y}px}`}</span>
+        </div>
+      }
+    />
+  );
+}
