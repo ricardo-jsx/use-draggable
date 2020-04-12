@@ -12,7 +12,7 @@
   },
   "scripts": {
     "storybook": "start-storybook",
-    "build-storybook": "build-storybook -c .storybook -o dist"
+    "build": "build-storybook -c .storybook -o dist"
   },
   "eslintConfig": {
     "extends": "react-app"
