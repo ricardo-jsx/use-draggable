@@ -116,7 +116,7 @@ export function WithBounds() {
 }
 
 export function WithMouseEvents() {
-  const { ref, mouseProps } = useDraggable();
+  const { ref, mouse } = useDraggable();
 
   return (
     <Tweet
@@ -124,9 +124,9 @@ export function WithMouseEvents() {
       message={
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span>I listen to mouse actions.</span>
-          <span>Pressed: {mouseProps.isPressed ? "Yes" : "No"}</span>
-          <span>Dragging: {mouseProps.isDragging ? "Yes" : "No"}</span>
-          <span>Drag Stoped: {mouseProps.isDragStopped ? "Yes" : "No"}</span>
+          <span>Pressed: {mouse.isPressed ? "Yes" : "No"}</span>
+          <span>Dragging: {mouse.isDragging ? "Yes" : "No"}</span>
+          <span>Drag Stoped: {mouse.isDragStopped ? "Yes" : "No"}</span>
         </div>
       }
     />

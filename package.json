@@ -7,7 +7,7 @@
   "repository": "ricardo-jsx/use-draggable",
   "main": "dist/useDraggable.js",
   "module": "dist/useDraggable.modern.js",
-  "source": "src/useDraggable.js",
+  "source": "src/useDraggable.ts",
   "engines": {
     "node": ">=10"
   },
@@ -28,6 +28,7 @@
     "react": "^16.0.0"
   },
   "devDependencies": {
+    "@types/react": "^16.9.34",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",

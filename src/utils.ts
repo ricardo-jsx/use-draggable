@@ -1,4 +1,4 @@
-export function calculateSpacing(elem, direction) {
+export function calculateSpacing(elem: any, direction: 'Top' | 'Right' | 'Bottom' | 'Left') {
   const paddingD = `padding${direction}`;
   const borderD = `border${direction}`;
 

@@ -1,7 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
-import { calculateSpacing } from "./utils";
+import { useState, useEffect, useMemo, RefObject } from "react";
 
-export default function useBounds(ref, refBound, position) {
+import { calculateSpacing } from "./utils";
+import { Position } from "./index.types";
+
+export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>, position: Position) : Position {
   const [bounds, setBounds] = useState({
     top: null,
     right: null,

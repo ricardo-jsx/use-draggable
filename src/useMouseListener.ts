@@ -1,13 +1,15 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, RefObject } from "react";
 
-const INITIAL_STATE = {
+import { Mouse, Action } from './index.types';
+
+const INITIAL_STATE: Mouse = {
   position: null,
   isPressed: false,
   isDragging: false,
   isDragStopped: false
 };
 
-function reducer(state, action) {
+function reducer(state: Mouse, action: Action) {
   switch (action.type) {
     case "MOUSE_DOWN": {
       return {
@@ -39,7 +41,7 @@ function reducer(state, action) {
   }
 }
 
-export default function useMouseListener(ref) {
+export default function useMouseListener(ref: RefObject<any>): Mouse {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {

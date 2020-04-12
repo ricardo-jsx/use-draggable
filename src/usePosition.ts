@@ -1,11 +1,17 @@
-import { useReducer, useEffect } from "react";
+import { useReducer, useEffect, RefObject } from "react";
+import { Mouse, Position, Action } from "./index.types";
 
-const INITIAL_STATE = {
+interface UsePosition {
+  currentPosition: Position,
+  lastMousePosition: Position | null
+}
+
+const INITIAL_STATE: UsePosition = {
   currentPosition: { x: 0, y: 0 },
   lastMousePosition: null
 };
 
-function reducer(state, action) {
+function reducer(state: UsePosition, action: Action) {
   switch (action.type) {
     case "SET_INITIAL_POSITION": {
       const { x, y } = action.payload;
@@ -44,7 +50,7 @@ function reducer(state, action) {
   }
 }
 
-export default function usePosition(ref, mouseProps, initialPosition, axis) {
+export default function usePosition(ref: RefObject<any>, mouse: Mouse, initialPosition: Position, axis: 'x' | 'y' | 'both'): Position {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
@@ -53,8 +59,8 @@ export default function usePosition(ref, mouseProps, initialPosition, axis) {
   }, [ref, initialPosition]);
 
   useEffect(
-    () => dispatch({ type: "UPDATE_POSITION", payload: { mouseProps, axis } }),
-    [mouseProps, axis]
+    () => dispatch({ type: "UPDATE_POSITION", payload: { mouseProps: mouse, axis } }),
+    [mouse, axis]
   );
 
   return state.currentPosition;

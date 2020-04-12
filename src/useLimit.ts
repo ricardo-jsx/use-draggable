@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 
-export default function useLimit(limit, initialPosition, position) {
+import { Limit, Position } from "./index.types";
+
+export default function useLimit(limit: Limit, initialPosition: Position, position: Position): Position {
   return useMemo(() => {
     if (!limit) return position;
 
