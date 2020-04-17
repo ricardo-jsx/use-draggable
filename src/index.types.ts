@@ -1,8 +1,8 @@
 import { RefObject } from 'react';
 
 export interface Position {
-  x?: number,
-  y?: number
+  x: number,
+  y: number
 }
 
 export interface Coords {
@@ -19,22 +19,24 @@ export interface Mouse {
   isDragStopped: Boolean
 }
 
+export type Axis = 'x' | 'y' | 'both';
+
 export interface PartialDraggableProps {
   initialPosition?: Position | null,
-  axis?: 'x' | 'y' | 'both',
+  axis?: Axis,
   limit?: Coords | null
 }
 
 export interface DraggableProps {
-  initialPosition: Position,
-  axis: 'x' | 'y' | 'both',
-  limit: Coords
+  initialPosition: Position | null,
+  limit: Coords | null,
+  axis: Axis,
 }
 
 export interface Draggable {
-  ref: RefObject<any>,
-  refHandle: RefObject<any>,
-  refBound: RefObject<any>,
+  ref: RefObject<HTMLElement>,
+  refHandle: RefObject<HTMLElement>,
+  refBound: RefObject<HTMLElement>,
   position: Position,
   mouse: Mouse
 }

@@ -66,7 +66,7 @@ const StyledTweet = styled.article`
 `;
 
 const Tweet = React.forwardRef((props, ref) => (
-  <StyledTweet ref={ref} isDraggable={props.isDraggable} axis={props.axis}>
+  <StyledTweet ref={ref} {...props}>
     <img src={tweetAuthor} alt="Tweet Author" />
     <div>
       <div className="username">

@@ -3,7 +3,7 @@ import { useEffect, useReducer, RefObject } from "react";
 import { Mouse, Action } from './index.types';
 
 const INITIAL_STATE: Mouse = {
-  position: { x: undefined, y: undefined },
+  position: { x: 0, y: 0 },
   isPressed: false,
   isDragging: false,
   isDragStopped: false
@@ -41,12 +41,12 @@ function reducer(state: Mouse, action: Action) {
   }
 }
 
-export default function useMouseListener(ref: RefObject<any>): Mouse {
+export default function useMouseListener(ref: RefObject<HTMLElement>): Mouse {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
 
   useEffect(() => {
     function handleMouseDown(e: any) {
-      if (ref.current.contains(e.target)) {
+      if (ref.current && ref.current.contains(e.target)) {
         dispatch({
           type: "MOUSE_DOWN",
           payload: { x: e.clientX, y: e.clientY }

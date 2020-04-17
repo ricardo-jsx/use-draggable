@@ -3,16 +3,17 @@ import { useState, useEffect, useMemo, RefObject } from "react";
 import { calculateSpacing } from "./utils";
 import { Position, Coords } from "./index.types";
 
-export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>, position: Position) : Position {
-  const initialState: Coords = useMemo(() => ({ north: undefined, east: undefined, south: undefined, west: undefined }), []);
-  const [bounds, setBounds] = useState(initialState);
+const isUndefined = (val: any) => typeof val === 'undefined';
 
-  useEffect(() => {
-    const domRefRect = ref.current.getBoundingClientRect();
-    const width = domRefRect.right - domRefRect.left;
-    const height = domRefRect.bottom - domRefRect.top;
+export default function useBounds(ref: RefObject<HTMLElement>, refBound: RefObject<HTMLElement>, position: Position) : Position {
+  const [bounds, setBounds] = useState<Coords>({});
 
-    if (refBound.current) {
+  useEffect(() => {    
+    if (ref.current && refBound.current) {
+      const domRefRect = ref.current.getBoundingClientRect();
+      const width = domRefRect.right - domRefRect.left;
+      const height = domRefRect.bottom - domRefRect.top;
+
       const domBoundRect = refBound.current.getBoundingClientRect();
       const boundWidth = domBoundRect.right - domBoundRect.left;
       const boundHeight = domBoundRect.bottom - domBoundRect.top;
@@ -39,13 +40,16 @@ export default function useBounds(ref: RefObject<any>, refBound: RefObject<any>,
 
   return useMemo(() => {
     let { x, y } = position;
-
-    if (Object.values(bounds).every(val => val === null)) return position;
-
-    if (y! < (bounds.north ?? Number.POSITIVE_INFINITY)) y = bounds.north;
-    if (y! > (bounds.south ?? Number.NEGATIVE_INFINITY)) y = bounds.south;
-    if (x! < (bounds.west ?? Number.NEGATIVE_INFINITY)) x = bounds.west;
-    if (x! > (bounds.east ?? Number.POSITIVE_INFINITY)) x = bounds.east;
+    
+    const northLim = isUndefined(bounds.north) ? -9999 : bounds.north!;
+    const eastLim = isUndefined(bounds.east) ? 9999 : bounds.east!;
+    const southLim = isUndefined(bounds.south) ? 9999 : bounds.south!;
+    const westLim = isUndefined(bounds.west) ? -9999 : bounds.west!;
+    
+    if (y < northLim) y = northLim;
+    if (x > eastLim) x = eastLim;
+    if (y > southLim) y = southLim;
+    if (x < westLim) x = westLim;
 
     return { x, y };
   }, [position, bounds]);

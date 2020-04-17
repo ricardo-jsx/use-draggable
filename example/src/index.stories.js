@@ -58,7 +58,8 @@ export function WithDragHandle() {
 }
 
 export function WithTrackPosition() {
-  const { ref, position } = useDraggable();
+  const initialPosition = useMemo(() => ({ x: 200, y: 50 }), []);
+  const { ref, position } = useDraggable({ initialPosition });
 
   return (
     <Tweet
@@ -69,9 +70,12 @@ export function WithTrackPosition() {
 }
 
 export function WithAxis() {
-  const { ref } = useDraggable({ axis: "both" });
-  const { ref: refX } = useDraggable({ axis: "x" });
-  const { ref: refY } = useDraggable({ axis: "y" });
+  const propsX = useMemo(() => ({ axis: "x" }), []);
+  const propsY = useMemo(() => ({ axis: "y" }), []);
+
+  const { ref } = useDraggable();
+  const { ref: refX } = useDraggable(propsX);
+  const { ref: refY } = useDraggable(propsY);
 
   return (
     <div>
@@ -79,39 +83,18 @@ export function WithAxis() {
         ref={ref}
         axis="both"
         message="I can be dragged me on both axis."
+        style={{ marginBottom: "1rem" }}
       />
+
       <Tweet
         ref={refX}
         axis="x"
         message="I can only be dragged horizontally."
+        style={{ marginBottom: "1rem" }}
       />
+
       <Tweet ref={refY} axis="y" message="I can only be dragged vertically." />
     </div>
-  );
-}
-
-export function WithBounds() {
-  const initialPosition = useMemo(() => ({ x: 0, y: 0 }), []);
-  const { ref, refBound, position } = useDraggable({ initialPosition });
-  const { ref: refB, refBound: refBoundB, position: positionB } = useDraggable({
-    initialPosition
-  });
-
-  return (
-    <>
-      <StyledBounds ref={refBound}>
-        <Tweet
-          ref={ref}
-          message={`I can only be dragged inside this box { x: ${position.x}px, y:${position.y}px}`}
-        />
-      </StyledBounds>
-      <StyledBounds ref={refBoundB}>
-        <Tweet
-          ref={refB}
-          message={`I can only be dragged inside this box { x: ${positionB.x}px, y:${positionB.y}px}`}
-        />
-      </StyledBounds>
-    </>
   );
 }
 
@@ -133,15 +116,27 @@ export function WithMouseEvents() {
   );
 }
 
+export function WithBounds() {
+  const initialPosition = useMemo(() => ({ x: 0, y: 0 }), []);
+  const { ref, refBound } = useDraggable({ initialPosition });
+  const { ref: refB, refBound: refBoundB } = useDraggable({ initialPosition });
+
+  return (
+    <>
+      <StyledBounds ref={refBound}>
+        <Tweet ref={ref} message={`I can only be dragged inside this box`} />
+      </StyledBounds>
+      <StyledBounds ref={refBoundB}>
+        <Tweet ref={refB} message={`I can only be dragged inside this box`} />
+      </StyledBounds>
+    </>
+  );
+}
+
 export function WithDirectionLimits() {
   const initialPosition = useMemo(() => ({ x: 300, y: 300 }), []);
   const limit = useMemo(
-    () => ({
-      top: 300,
-      right: 300,
-      bottom: 300,
-      left: 300
-    }),
+    () => ({ north: 100, east: 100, south: 100, west: 100 }),
     []
   );
 
@@ -152,7 +147,7 @@ export function WithDirectionLimits() {
       ref={ref}
       message={
         <div style={{ display: "flex", flexDirection: "column" }}>
-          <span>I can only be dragged 300px in any direction.</span>
+          <span>I can only be dragged 100px in any direction.</span>
           <span>{`{ x: ${position.x}px, y:${position.y}px}`}</span>
         </div>
       }
