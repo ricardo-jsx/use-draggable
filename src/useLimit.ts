@@ -12,7 +12,6 @@ export default function useLimit(initialPosition: Position | null, currPosition:
   const maxRight = x + (limit.east || 9999);
   const minTop = y - (limit.north || 9999);
   const maxBottom = y + (limit.south || 9999);
-  debugger;
 
   x = currPosition.x < minLeft ? minLeft : currPosition.x > maxRight ? maxRight : currPosition.x;
   y = currPosition.y < minTop ? minTop : currPosition.y > maxBottom ? maxBottom : currPosition.y;
